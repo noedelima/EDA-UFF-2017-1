@@ -9,7 +9,10 @@
 #define DATABASE_HPP_
 
 #include <iostream>
+#include <stddef.h>
 using namespace std;
+
+#define null "0";
 
 /*******************************************************************
  * Este template é uma estrutura de dados circular duplamente
@@ -114,7 +117,7 @@ public:
 		node* temp = remove(value);
 		T output;
 		if (temp){output = (*temp).content;}
-		else{output = "0";}
+		else{output = null;}
 		delete temp;
 		return output;
 	}
@@ -123,14 +126,14 @@ public:
 			return (*search(key)).content;
 		}
 		else{
-			return "0";
+			return null;
 		}
 	}
 	T pointer(){
 		if(count > 0){
 			return (*ptractual).content;
 		}
-		else{return "0";}
+		else{return null;}
 	}
 	int size(){return count;}
 };
@@ -154,7 +157,7 @@ private:
 		T content;
 		node* ptrnext;
 		explicit node(){
-			content = "0";
+			content = null;
 			ptrnext = 0;
 		}
 		explicit node(T element){
@@ -223,17 +226,17 @@ public:
 	}
 	T pop(){
 		node* temp = remove();
-		if(temp == 0){return "0";}
+		if(temp == 0){return null;}
 		T output = (*temp).content;
 		delete temp;
 		return output;
 	}
 	T find(T key){
 		if (search(key) != 0){return (*search(key)).content;}
-		else {return "0";}
+		else {return null;}
 	}
 	T pointer(){
-		if (count == 0){return "0";}
+		if (count == 0){return null;}
 		else{return (*ptrfirst).content;}
 	}
 	int size(){return count;}
@@ -258,7 +261,7 @@ private:
 		T content;
 		node* ptrnext;
 		explicit node(){
-			content = "0";
+			content = null;
 			ptrnext = 0;
 		}
 		explicit node(T element){
@@ -322,17 +325,17 @@ public:
 	}
 	T pop(){
 		node* temp = remove();
-		if(temp == 0){return "0";}
+		if(temp == 0){return null;}
 		T output = (*temp).content;
 		delete temp;
 		return output;
 	}
 	T find(T key){
 		if (search(key) != 0){return (*search(key)).content;}
-		else{return "0";}
+		else{return null;}
 	}
 	T pointer(){
-		if (count == 0){return "0";}
+		if (count == 0){return null;}
 		else{return (*ptrpoint).content;}
 	}
 	int size(){return count;}
