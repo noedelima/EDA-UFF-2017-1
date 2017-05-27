@@ -30,8 +30,8 @@ private:
 	public:
 		T content; //Elemento armazenado do tipo T
 		Ref key; // Chave de indexação para referência e busca
-		node* ptrnext;
-		node* ptrprevious;
+		node* ptrnext; // Ponteiro para o próximo elemento da lista
+		node* ptrprevious; // Ponteiro para o elemento anterior da lista
 		explicit node(){
 			content = 0;
 			key = 0;
@@ -45,9 +45,9 @@ private:
 			ptrprevious = nullptr;
 		}
 	};
-	int count;
-	node* ptractual;
-	node* search(Ref find){
+	int count; // Contador para o número de elementos na lista
+	node* ptractual; // Ponteiro para um nó de referênica da lista circular
+	node* search(Ref find){ // Busca o nó que contém a referência find
 		if (count == 0){return nullptr;}
 		if ((*ptractual).key == find){return ptractual;}
 		else{
@@ -60,7 +60,7 @@ private:
 		}
 		return nullptr;
 	}
-	void insert(node* newnode){
+	void insert(node* newnode){ // Insere encadeia um novo nó na lista
 		if (count == 0){
 			count++;
 			ptractual = newnode;
@@ -77,7 +77,7 @@ private:
 			ptractual = newnode;
 		}
 	}
-	node* remove(Ref key){
+	node* remove(Ref key){ // desencadeia e retorna um nó com referência key da lista
 		if (count == 0){return nullptr;}
 		else if (count == 1){
 			if ((*ptractual).key == key){
@@ -99,22 +99,22 @@ private:
 		return nullptr;
 	}
 public:
-	explicit database(){
+	explicit database(){ // Constrói uma estrutura vazia
 		count = 0;
 		ptractual = nullptr;
 	}
-	~database(){
+	~database(){ // Destrói uma estrutura desalocando da memória todos os nós da lista
 		while(ptractual != nullptr){
 			node* ptrtemp = ptractual;
 			ptractual = (*ptractual).ptrnext;
 			pop((*ptrtemp).key);
 		}
 	}
-	void push(T element, Ref value){
+	void push(T element, Ref value){ // Cria um novo nó a partir de um elemento e uma chave e insere na lista
 		node* inserting = new node(element, value);
 		insert(inserting);
 	}
-	T pop(Ref value){
+	T pop(Ref value){ // Busca um nó por uma chave key, deleta o nó e retorna o conteúdo
 		node* temp = remove(value);
 		T output;
 		if (temp){output = (*temp).content;}
@@ -122,7 +122,7 @@ public:
 		delete temp;
 		return output;
 	}
-	T find(Ref key){
+	T find(Ref key){ // Busca o conteúdo de um nó através da referência key
 		if(search(key) != nullptr){
 			return (*search(key)).content;
 		}
@@ -130,19 +130,19 @@ public:
 			return null;
 		}
 	}
-	T pointer(){
+	T pointer(){ // Informa o elemento atual da referência
 		if(count > 0){
 			return (*ptractual).content;
 		}
 		else{return null;}
 	}
-	T pointernext(){
+	T pointernext(){ // Informa o próximo elemento da lista a partir da referência atual
 		if(count > 0){
 			return (*(*ptractual).ptrprevious).content;
 		}
 		else{return null;}
 	}
-	int size(){return count;}
+	int size(){return count;} // Informa o número de elementos armazenados
 };
 
 /*******************************************************************
