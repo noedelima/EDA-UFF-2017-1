@@ -12,7 +12,7 @@
 #include <stddef.h>
 using namespace std;
 
-#define null "0";
+#define null "";
 
 /*******************************************************************
  * Este template é uma estrutura de dados circular duplamente
@@ -26,28 +26,29 @@ using namespace std;
 template<typename T, typename Ref>
 class database{
 private:
-	class node{
+	class node{ // Célula para armazenar um elemento
 	public:
-		T content;
-		Ref key;
+		T content; //Elemento armazenado do tipo T
+		Ref key; // Chave de indexação para referência e busca
 		node* ptrnext;
 		node* ptrprevious;
 		explicit node(){
 			content = 0;
 			key = 0;
-			ptrnext = 0;
-			ptrprevious = 0;
+			ptrnext = nullptr;
+			ptrprevious = nullptr;
 		}
 		explicit node(T element, Ref value){
 			content = element;
 			key = value;
-			ptrnext = 0;
-			ptrprevious = 0;
+			ptrnext = nullptr;
+			ptrprevious = nullptr;
 		}
 	};
 	int count;
 	node* ptractual;
 	node* search(Ref find){
+		if (count == 0){return nullptr;}
 		if ((*ptractual).key == find){return ptractual;}
 		else{
 			node* start = ptractual;
@@ -57,7 +58,7 @@ private:
 				else {ptractual = (*ptractual).ptrnext;}
 			}
 		}
-		return 0;
+		return nullptr;
 	}
 	void insert(node* newnode){
 		if (count == 0){
@@ -77,12 +78,12 @@ private:
 		}
 	}
 	node* remove(Ref key){
-		if (count == 0){return 0;}
+		if (count == 0){return nullptr;}
 		else if (count == 1){
 			if ((*ptractual).key == key){
 				count--;
 				node* temp = ptractual;
-				ptractual = 0;
+				ptractual = nullptr;
 				return temp;
 			}
 		}
@@ -95,15 +96,15 @@ private:
 			count--;
 			return temp;
 		}
-		return 0;
+		return nullptr;
 	}
 public:
 	explicit database(){
 		count = 0;
-		ptractual = 0;
+		ptractual = nullptr;
 	}
 	~database(){
-		while(ptractual != 0){
+		while(ptractual != nullptr){
 			node* ptrtemp = ptractual;
 			ptractual = (*ptractual).ptrnext;
 			pop((*ptrtemp).key);
@@ -122,7 +123,7 @@ public:
 		return output;
 	}
 	T find(Ref key){
-		if(search(key)){
+		if(search(key) != nullptr){
 			return (*search(key)).content;
 		}
 		else{
@@ -132,6 +133,12 @@ public:
 	T pointer(){
 		if(count > 0){
 			return (*ptractual).content;
+		}
+		else{return null;}
+	}
+	T pointernext(){
+		if(count > 0){
+			return (*(*ptractual).ptrprevious).content;
 		}
 		else{return null;}
 	}
@@ -158,21 +165,21 @@ private:
 		node* ptrnext;
 		explicit node(){
 			content = null;
-			ptrnext = 0;
+			ptrnext = nullptr;
 		}
 		explicit node(T element){
 			content = element;
-			ptrnext = 0;
+			ptrnext = nullptr;
 		}
 	};
 	int count;
 	node* ptrfirst;
 	node* ptrlast;
 	node* search(T find){
-		if (count == 0){return 0;}
+		if (count == 0){return nullptr;}
 		else if (count == 1){
 			if ((*ptrfirst).content == find){return ptrfirst;}
-			else{return 0;}
+			else{return nullptr;}
 		}
 		else{
 			node* ptractual = ptrfirst;
@@ -181,7 +188,7 @@ private:
 				else{ptractual = (*ptractual).ptrnext;}
 			}
 			if ((*ptractual).content == find){return ptractual;}
-			else{return 0;}
+			else{return nullptr;}
 		}
 	}
 	void insert(node* newelement){
@@ -197,12 +204,12 @@ private:
 		}
 	}
 	node* remove(){
-		if (count == 0){return 0;}
+		if (count == 0){return nullptr;}
 		else if (count == 1){
 			count--;
 			node* temp = ptrfirst;
-			ptrfirst = 0;
-			ptrlast = 0;
+			ptrfirst = nullptr;
+			ptrlast = nullptr;
 			return temp;
 		}
 		else{
@@ -216,8 +223,8 @@ public:
 	explicit queue(){
 		cout << "\nConstruindo a fila\n";
 		count = 0;
-		ptrfirst = 0;
-		ptrlast = 0;
+		ptrfirst = nullptr;
+		ptrlast = nullptr;
 	}
 	~queue(){while (count != 0){pop();}}
 	void push(T element){
@@ -226,13 +233,13 @@ public:
 	}
 	T pop(){
 		node* temp = remove();
-		if(temp == 0){return null;}
+		if(temp == nullptr){return null;}
 		T output = (*temp).content;
 		delete temp;
 		return output;
 	}
 	T find(T key){
-		if (search(key) != 0){return (*search(key)).content;}
+		if (search(key) != nullptr){return (*search(key)).content;}
 		else {return null;}
 	}
 	T pointer(){
@@ -262,29 +269,29 @@ private:
 		node* ptrnext;
 		explicit node(){
 			content = null;
-			ptrnext = 0;
+			ptrnext = nullptr;
 		}
 		explicit node(T element){
 			content = element;
-			ptrnext = 0;
+			ptrnext = nullptr;
 		}
 	};
 	int count;
 	node* ptrpoint;
 	node* search(T find){
-		if (count == 0){return 0;}
+		if (count == 0){return nullptr;}
 		else if (count == 1){
 			if ((*ptrpoint).content == find){return ptrpoint;}
-			else{return 0;}
+			else{return nullptr;}
 		}
 		else{
 			node* ptractual = ptrpoint;
-			while ((*ptrpoint).ptrnext != 0){
+			while ((*ptrpoint).ptrnext != nullptr){
 				if ((*ptractual).content == find){return ptractual;}
 				else{ptractual = (*ptractual).ptrnext;}
 			}
 			if ((*ptractual).content == find){return ptractual;}
-			else{return 0;}
+			else{return nullptr;}
 		}
 	}
 	void insert(node* newelement){
@@ -299,11 +306,11 @@ private:
 		}
 	}
 	node* remove(){
-		if (count == 0){return 0;}
+		if (count == 0){return nullptr;}
 		else if (count == 1){
 			count--;
 			node* temp = ptrpoint;
-			ptrpoint = 0;
+			ptrpoint = nullptr;
 			return temp;
 		}
 		else{
@@ -316,7 +323,7 @@ private:
 public:
 	explicit stack(){
 		count = 0;
-		ptrpoint = 0;
+		ptrpoint = nullptr;
 	}
 	~stack(){while (count != 0){pop();}}
 	void push(T element){
@@ -325,13 +332,13 @@ public:
 	}
 	T pop(){
 		node* temp = remove();
-		if(temp == 0){return null;}
+		if(temp == nullptr){return null;}
 		T output = (*temp).content;
 		delete temp;
 		return output;
 	}
 	T find(T key){
-		if (search(key) != 0){return (*search(key)).content;}
+		if (search(key) != nullptr){return (*search(key)).content;}
 		else{return null;}
 	}
 	T pointer(){
