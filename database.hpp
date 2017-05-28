@@ -9,7 +9,6 @@
 #define DATABASE_HPP_
 
 #include <iostream>
-#include <stddef.h>
 using namespace std;
 
 #define null "";
@@ -118,7 +117,7 @@ public:
 		node* temp = remove(value);
 		T output;
 		if (temp){output = (*temp).content;}
-		else{output = null;}
+		//else{output = null;}
 		delete temp;
 		return output;
 	}
@@ -127,20 +126,20 @@ public:
 			return (*search(key)).content;
 		}
 		else{
-			return null;
+			//return null;
 		}
 	}
 	T pointer(){ // Informa o elemento atual da referência
 		if(count > 0){
 			return (*ptractual).content;
 		}
-		else{return null;}
+		//else{return null;}
 	}
 	T pointernext(){ // Informa o próximo elemento da lista a partir da referência atual
 		if(count > 0){
 			return (*(*ptractual).ptrprevious).content;
 		}
-		else{return null;}
+		//else{return null;}
 	}
 	int size(){return count;} // Informa o número de elementos armazenados
 };
@@ -233,18 +232,22 @@ public:
 	}
 	T pop(){
 		node* temp = remove();
-		if(temp == nullptr){return null;}
-		T output = (*temp).content;
-		delete temp;
-		return output;
+		if(temp){
+			T output = (*temp).content;
+			delete temp;
+			return output;
+		}
+		//else {return null;}
 	}
 	T find(T key){
 		if (search(key) != nullptr){return (*search(key)).content;}
-		else {return null;}
+		//else {return null;}
 	}
 	T pointer(){
-		if (count == 0){return null;}
-		else{return (*ptrfirst).content;}
+		if (count != 0){
+			return (*ptrfirst).content;
+		}
+		//else {return null;}
 	}
 	int size(){return count;}
 };
