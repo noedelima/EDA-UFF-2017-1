@@ -9,8 +9,5 @@
 #define IOINTERFACE_HPP_
 
 #include "sales.hpp"
-queue<saling> getdata();
-
-
-
+tree<tree<saling, int>, int> getdata(string path, string file, string extension);
 #endif /* IOINTERFACE_HPP_ */

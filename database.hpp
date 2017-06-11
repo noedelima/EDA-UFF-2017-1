@@ -148,8 +148,7 @@ public:
  * Este template é uma estrutura de dados simplesmente
  * encadeada que serve para armazenar objetos de tipo genérico
  * Internamente ela utiliza nós (classe node) para armazenar
- * esses objetos do tipo T. Eles são indexados por uma referência
- * de classe Key (que pode ser, por exemplo, um inteiro).
+ * esses objetos do tipo T.
  * Dentro desta estrutura tem os métodos de manipulação, que
  * cria nós, busca elementos, elimina nós, etc...
  * Esta estrutura é implementada como uma fila, o primeiro
@@ -220,7 +219,6 @@ private:
 	}
 public:
 	explicit queue(){
-		cout << "\nConstruindo a fila\n";
 		count = 0;
 		ptrfirst = nullptr;
 		ptrlast = nullptr;
@@ -249,6 +247,12 @@ public:
 		}
 		else {return null;}
 	}
+	T* last(){
+		if (count != 0){
+			return (*ptrlast).content;
+		}
+		else {return null;}
+	}
 	int size(){return count;}
 };
 
@@ -256,8 +260,7 @@ public:
  * Este template é uma estrutura de dados simplesmente
  * encadeada que serve para armazenar objetos de tipo genérico
  * Internamente ela utiliza nós (classe node) para armazenar
- * esses objetos do tipo T. Eles são indexados por uma referência
- * de classe Key (que pode ser, por exemplo, um inteiro).
+ * esses objetos do tipo T.
  * Dentro desta estrutura tem os métodos de manipulação, que
  * cria nós, busca elementos, elimina nós, etc...
  * Esta estrutura é implementada como uma pilha, o último
@@ -349,6 +352,200 @@ public:
 		else{return (*ptrpoint).content;}
 	}
 	int size(){return count;}
+};
+
+/*******************************************************************
+ * Este template é uma estrutura de dados em Árvore Balanceada AVL
+ * que serve para armazenar objetos de tipo genérico
+ * Internamente ela utiliza nós (classe node) para armazenar
+ * esses objetos do tipo T. Eles são indexados por uma referência
+ * de classe Key (que pode ser, por exemplo, um inteiro).
+ * Dentro desta estrutura tem os métodos de manipulação, que
+ * cria nós, busca elementos, elimina nós, etc...
+ * Esta estrutura é implementada como uma pilha, o último
+ * que entra é o primeiro que sai
+ *******************************************************************/
+template<typename T, typename Ref>
+class tree{
+private:
+	class node{
+	public:
+		T* content;
+		Ref key;
+		node* ptrtop;
+		node* ptrleft;
+		int level_left;
+		node* ptrright;
+		int level_right;
+		node(){
+			content = null;
+			key = 0;
+			ptrtop = nullptr;
+			ptrleft = nullptr;
+			level_left = 0;
+			ptrright = nullptr;
+			level_right = 0;
+		}
+		node(T* ptrelement, Ref index){
+			content = ptrelement;
+			key = index;
+			ptrtop = nullptr;
+			ptrleft = nullptr;
+			level_left = 0;
+			ptrright = nullptr;
+			level_right = 0;
+		}
+		int level(){
+			if(level_left > level_right){
+				return level_left;
+			}
+			else{
+				return level_right;
+			}
+		}
+		int inserting(node* element, tree<T, Ref>* structure){
+			if(element->key <= this->key){
+				if(ptrleft){
+					level_left = 1 + ptrleft->inserting(element, structure);
+				} // Inclui a esquerda
+				else{
+					ptrleft = element;
+					element->ptrtop = this;
+					level_left = 1;
+				} // Insere a esquerda
+			}
+			else{
+				if(ptrright){
+					level_right = 1 + ptrright->inserting(element, structure);
+				} // Inclui a direita
+				else{
+					ptrright = element;
+					element->ptrtop = this;
+					level_right = 1;
+				} // Insere a direita
+			}
+			if(level_left - level_right > 1){
+				return ptrleft->leftrotate(structure);
+			} // Avalia se é necessário efetuar uma rotação a esquerda
+			if(level_right - level_left > 1){
+				return ptrright->rightrotate(structure);
+			} // Avalia se é necessário efetuar uma rotação a direita
+			if (level_right > level_left){return level_right;}
+			else {return level_left;}
+		}
+		int leftrotate(tree<T, Ref>* structure){
+			node* caller = ptrtop; // Cria uma referência ao nó que chama a rotação e vai descer
+			node* maybe; // Nó que pode existir a direita do que vai subir na rotação
+			node* father; // Nó que pode existir acima da rotação
+			if(ptrright){maybe = ptrright;}
+			else{maybe = nullptr;}
+			if(caller->ptrtop){father = caller->ptrtop;}
+			else{father = nullptr;}
+			if(father){
+				if(father->ptrleft == caller){father->ptrleft = this;}
+				else{father->ptrright = this;}
+			}
+			else{structure->father(this);}
+			int level_maybe; // Configura o nó que pode existir em maybe
+			if(maybe){
+				level_maybe = maybe->level();
+				maybe->ptrtop = caller;
+			}
+			else{level_maybe = -1;}
+			caller->ptrtop = this; // Configura o nó que desce
+			caller->ptrleft = maybe;
+			caller->level_left = level_maybe +1;
+			ptrtop = father; // Configura o nó que sobe
+			ptrright = caller;
+			level_right = 1 + caller->level();
+			if(level_left > level_right){return level_left;}
+			else{return level_right;}
+		}
+		int rightrotate(tree<T, Ref>* structure){
+			node* caller = ptrtop; // Cria uma referência ao nó que chama a rotação e vai descer
+			node* maybe; // Nó que pode existir a esquerda do que vai subir na rotação
+			node* father; // Nó que pode existir acima da rotação
+			if(ptrleft){maybe = ptrleft;}
+			else{maybe = nullptr;}
+			if(caller->ptrtop){father = caller->ptrtop;}
+			else{father = nullptr;}
+			if(father){
+				if(father->ptrleft == caller){father->ptrleft = this;}
+				else{father->ptrright = this;}
+			}
+			else{structure->father(this);}
+			int level_maybe; // Configura o nó que pode existir em maybe
+			if(maybe){
+				level_maybe = maybe->level();
+				maybe->ptrtop = caller;
+			}
+			else{level_maybe = -1;}
+			caller->ptrtop = this; // Configura o nó que desce
+			caller->ptrright = maybe;
+			caller->level_right = level_maybe +1;
+			ptrtop = father; // Configura o nó que sobe
+			ptrleft = caller;
+			level_left = 1 + caller->level();
+			if(level_left > level_right){return level_left;}
+			else{return level_right;}
+		}
+		void getdata(queue<T>* listing){
+			if(ptrleft){ptrleft->getdata(listing);}
+			T* data = new T;
+			*data = *this->content;
+			listing->push(data);
+			if(ptrright){ptrright->getdata(listing);}
+		}
+		T* search(Ref KEY){
+			if(this->key == KEY){return this->content;}
+			else if(ptrleft && this->key > KEY){return (*this->ptrleft).search(KEY);}
+			else if(ptrright && this->key < KEY){return (*this->ptrright).search(KEY);}
+			else {return nullptr;}
+		}
+		void getrange(queue<T>* list, Ref min, Ref max){
+			if(ptrleft){ptrleft->getrange(list, min, max);}
+			if(this->key>min && this->key<max){
+				T* data = new T;
+				*data = *this->content;
+				list->push(data);
+			}
+			if(ptrright){ptrright->getrange(list, min, max);}
+		}
+	};
+	void father(node* change){ptrfather = change;}
+	node* ptrfather;
+	int count;
+public:
+	tree(){
+		ptrfather = nullptr;
+		count = 0;
+	}
+	int size(){return count;}
+	void push(T* element, Ref index){
+		node* newelement = new node(element, index);
+		if (ptrfather){
+			ptrfather->inserting(newelement, this);
+			count += 1;
+		}
+		else{
+			ptrfather = newelement;
+			count = 1;
+		}
+	}
+	queue<T> list(){
+		queue<T> list;
+		if(ptrfather){ptrfather->getdata(&list);}
+		return list;
+	}
+	T* find(Ref value){
+		if(ptrfather){return ptrfather->search(value);}
+		else {return null;}
+	}
+	queue<T> range(Ref min, Ref max){
+		queue<T> list;
+		if(ptrfather){ptrfather->getrange(&list, min, max);}
+		return list;
+	}
 };
 
 #endif /* DATABASE_HPP_ */

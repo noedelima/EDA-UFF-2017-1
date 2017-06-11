@@ -10,21 +10,21 @@
 
 class saling{
 public:
-	string unity;
-	string month;
-	string saler;
-	int total;
+	int unity;
+	int month;
+	int saler;
+	float total;
 	saling(){
-		unity = "";
-		month = "";
-		saler = "";
+		unity = 0;
+		month = 0;
+		saler = 0;
 		total = 0;
 	}
-	saling(string local, string date, string name, int count){
+	saling(int local, int date, int code, float value){
 		unity = local;
 		month = date;
-		saler = name;
-		total = count;
+		saler = code;
+		total = value;
 	}
 };
 

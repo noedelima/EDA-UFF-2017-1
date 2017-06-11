@@ -21,19 +21,15 @@ using namespace boost;
  *Then, use it to create objects in saling class
  *So, set all objects in a Data Struct
  *********************************************************************/
-queue<saling> getdata(){
-	queue<saling> data;
-	string salesname, path, extension, content, output="";
-	path = "/home/noedelima/Documentos/11\ -\ Arquivos\ e\ Utilitários\ Diversos/workspace/EDA-IC-Uff/src/";
-	extension = ".txt";
-	ifstream sales;
-	while (!sales.is_open()){
-		cout << "Qual o nome do arquivo? " << endl;
-		cin >> salesname;
-		sales.open(path+salesname+extension);
-		if (!sales){cout << "Falha na abertura do arquivo " << path+salesname+extension << endl;}
+tree<tree<saling, int>, int> getdata(string path, string file, string extension){
+	tree<tree<saling, int>, int> data;
+	string content, output="";
+	ifstream sales(path+file+extension);
+	if(!sales){
+		cout << "Falha na abertura do arquivo " << path+file+extension << endl;
+		return data;
 	}
-	cout << "Documento "<< path+salesname+extension << " aberto com sucesso!" << endl;
+	cout << "Documento "<< path+file+extension << " aberto com sucesso!" << endl;
 	int i=100, line=0; // Max char to read in each line, and a line counter
 	while(!sales.eof()){
 		line++;
@@ -44,17 +40,20 @@ queue<saling> getdata(){
 		if (line==1 || sales.eof()){continue;}
 		output += buffer;
 		split(vecsplit, output, is_any_of(","));
-		string unity = vecsplit[0];
-		string month = vecsplit[1];
-		string saler = vecsplit[2];
-		int total = lexical_cast<int>(vecsplit[3]);
-		//cout << "Unidade " << unity
-		//		<< ", em " << month
-		//		<< ", Vendedor " << saler
-		//		<< " vendeu "
-		//		<< total << " unidades!" << endl;
+		int unity = lexical_cast<int>(vecsplit[0]);
+		int month = lexical_cast<int>(vecsplit[1]);
+		int saler = lexical_cast<int>(vecsplit[2]);
+		float total = lexical_cast<float>(vecsplit[3]);
 		saling* sale = new saling(unity, month, saler, total);
-		data.push(sale);
+		if(data.find(unity)){
+			tree<saling, int>* T = data.find(unity);
+			(*T).push(sale, month);
+		}
+		else{
+			tree<saling, int>* T = new tree<saling, int>;
+			(*T).push(sale, month);
+			data.push(T, unity);
+		}
 	}
 	sales.close();
 	return data;
