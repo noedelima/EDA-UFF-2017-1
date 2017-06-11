@@ -1,5 +1,0 @@
-filial,ano_mês,cod_vendedor,total_vendido
-niteroi,2017_05,niteroiense,12
-rio,2017_03,carioca,5
-niteroi,2017_02,uffiano,8
-baixada,2017_02,fluminense,3
