@@ -60,5 +60,5 @@ Uma implementação alternativa para a questão 3) seria implementar outra árvo
 Também foi mantido uma busca por todos os elementos, apenas para demonstração, mas não faz parte do escopo do trabalho.
 
 
-Finalmente, cabe sobservar que, há uma variável path cujo valor toma como referência o endereço utilizado no computador do autor.
+Finalmente, cabe observar que, há uma variável path cujo valor toma como referência o endereço utilizado no computador do autor.
 Tanto no arquivo main.cpp quanto no arquivo gerarq.py ela deve ser substituida pelos dados do computador onde for compilado.
