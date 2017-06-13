@@ -61,4 +61,4 @@ Também foi mantido uma busca por todos os elementos, apenas para demonstração
 
 
 Finalmente, cabe observar que, há uma variável path cujo valor toma como referência o endereço utilizado no computador do autor.
-Tanto no arquivo main.cpp quanto no arquivo gerarq.py ela deve ser substituida pelos dados do computador onde for compilado.
+Tanto no arquivo main.cpp quanto no arquivo gerarq.py, ela deve ser substituida pelos dados do computador onde este programa está sendo compilado.
